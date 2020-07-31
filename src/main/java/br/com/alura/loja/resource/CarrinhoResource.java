@@ -23,24 +23,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 
+import br.com.alura.loja.dao.CarrinhoDAO;
+import br.com.alura.loja.modelo.Carrinho;
 import br.com.alura.loja.modelo.Conteudo;
+import br.com.alura.loja.modelo.Produto;
 
 @Path("carrinhos")
 public class CarrinhoResource {
 	Date data = new Date();
 	
-	/*
-	@Path("{id}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String busca(@PathParam("id") long id) {
-		
-		Carrinho carrinho = new CarrinhoDAO().busca(id);
-				
-		return carrinho.toXML();
-	}
-	*/
-
 	@POST
 	@Path("/testePostObj")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -127,14 +118,14 @@ public class CarrinhoResource {
 	@Path("/testePost")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public String testePost () {
+	public Response testePost () {
 		System.out.println(data.toString());
 		System.out.println("Teste-Post Chamado: sem par�metro");
 		
 		Conteudo conteudo = new Conteudo("53120201234", data.toString(), false);
 		
-		//return Response.ok().build();
-		return "ok"; //conteudo.toJson();
+		return Response.ok().build();
+		//return "ok"; //conteudo.toJson();
 	}
 	
 	@Path("{id}")
@@ -142,29 +133,29 @@ public class CarrinhoResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String busca(@PathParam("id") long id) {
 		
-		//Carrinho carrinho = new CarrinhoDAO().busca(id);
+		Carrinho carrinho = new CarrinhoDAO().busca(id);
 		
 		System.out.println("Teste-Get: OK");
 		
-		return null;//carrinho.toJson();
+		return carrinho.toJson();
 	}
 	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response adiciona(String conteudo) {
-		//Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
-		//new CarrinhoDAO().adiciona(carrinho);
+		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
+		new CarrinhoDAO().adiciona(carrinho);
 		
-		//URI uri = URI.create("/carrinhos/" + carrinho.getId());
-		return null;//Response.created(uri).build();
+		URI uri = URI.create("/carrinhos/" + carrinho.getId());
+		return Response.created(uri).build();
 	}
 	
 	@Path("{id}/produto/{produtoId}")
 	@DELETE
 	public Response removeProduto(@PathParam("id") long id, @PathParam("produtoId") long produtoId) {
-		//Carrinho carrinho = new CarrinhoDAO().busca(id);
-		//carrinho.remove(produtoId);
+		Carrinho carrinho = new CarrinhoDAO().busca(id);
+		carrinho.remove(produtoId);
 		
 		return Response.ok().build();
 	}
@@ -172,10 +163,10 @@ public class CarrinhoResource {
 	@Path("{id}/produto/{produtoId}/quantidade")
 	@PUT
 	public Response alteraProduto(String conteudo, @PathParam("id") long id, @PathParam("produtoId") long produtoId) {
-		//Carrinho carrinho = new CarrinhoDAO().busca(id);
+		Carrinho carrinho = new CarrinhoDAO().busca(id);
 		
-		//Produto produto = (Produto) new XStream().fromXML(conteudo);
-		//carrinho.trocaQuantidade(produto);
+		Produto produto = (Produto) new XStream().fromXML(conteudo);
+		carrinho.trocaQuantidade(produto);
 		
 		return Response.ok().build();
 		

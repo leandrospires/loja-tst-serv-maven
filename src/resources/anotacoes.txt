@@ -1,0 +1,10 @@
+https://github.com/leandrospires/loja-tst-services
+
+
+cd /d/desenv/Estudo/loja-tst-serv-maven/
+
+git init
+git add .
+git commit -m "Versão Porto"
+git remote add origin https://github.com/leandrospires/loja-tst-serv-maven.git
+git push -u origin master
